@@ -1,0 +1,100 @@
+#compdef parser
+local context state state_descr line
+typeset -A opt_args
+
+_parser() {
+    _arguments -C \
+        '(- :)--help[Muestra ayuda para el uso del comando]: :->arg' \
+        '(- :)--version[Muestra al version actual de la aplicación]: :->arg' \
+        '(-): :->command' \
+        '(-)*:: :->arg' && return
+
+    case $state in
+        (command)
+            local tools
+            tools=(
+                'calc:realiza calculos matematicos sencillos.'
+                'random:generador para operaciones aleatorias.'
+            )
+            _alternative \
+                'tools:common:{_describe "tool" tools }' \
+                'compiler: :_parser_default' && _ret=0
+            ;;
+        (arg)
+            case ${words[1]} in
+                (calc)
+                    _parser_calc
+                    ;;
+                (random)
+                    _parser_random
+                    ;;
+                (*)
+                    _parser_default
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+# Generates completions for parser build
+#
+_parser_calc() {
+    arguments=(
+        "(--verbose -v)"{--verbose,-v}"[Increase verbosity of informational output]"
+        "(--configuration -c)"{--configuration,-c}"[Build with configuration (debug|release) ]: :{_values '' 'debug[build with DEBUG configuration]' 'release[build with RELEASE configuration]'}"
+        "(--chdir -C)"{--chdir,-C}"[]: :_files"
+        '(-): :->command'
+        '(-)*:: :->arg'
+        )
+        _arguments $arguments && return
+
+        case $state in
+            (command)
+                local modes
+                modes=(
+                    'suma:suma dos numeros enteros separados por espacios.'
+                    'resta:resta dos numeros enteros separados por espacios.'
+                    'multiplica:multiplica dos numeros enteros separados por espacios.'
+                    'divide:divide dos numeros enteros separados por espacios.'
+                )
+                _describe "mode" modes
+                ;;
+            (arg)
+                case ${words[1]} in
+                    (suma)
+                        ;;
+                    (compute-checksum)
+                        ;;
+                    (clean)
+                        ;;
+                    (_format)
+                        ;;
+                esac
+                ;;
+        esac
+}
+
+# Generador aleatorio.
+#
+_parser_random() {
+    arguments=(
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments $arguments && return
+    case $state in
+        (command)
+            local modes
+            modes=(
+                'range:genera un numero aleatorio en un rango de dos enteros deparados por espacio.'
+            )
+            _describe "mode" modes
+            ;;
+    esac
+}
+
+# por defecto.
+_parser_default() {
+}
+
+_parser
