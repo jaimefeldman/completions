@@ -4,6 +4,10 @@ _miapp() {
     _arguments \
         "--name[Nombre]:nombre:((Juan Pedro Maria))" \
         "--verbose[Modo detallado]" \
-        "--file[Seleccionar archivo]:archivo:_files"
-}
+        "--file[Seleccionar archivo]:archivo:_path_files" \
+        "--shell[opciones de la shell]:option:_options" \
+        "--user[Usuario del sistema]:user:_users" \
+        "--network[Interfaces de red]:red:_net_interfaces" \
+        "--parameters[Parametros]:param:_parameters"
+} 
 
