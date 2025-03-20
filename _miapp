@@ -2,12 +2,47 @@
 
 _miapp() {
     _arguments \
-        "--name[Nombre]:nombre:((Juan Pedro Maria))" \
+        "1:Nombre:->nombre" \
+        "2:Actividad:->actividad" \
+        "3:Parámetro:->parametro" \
         "--verbose[Modo detallado]" \
-        "--file[Seleccionar archivo]:archivo:_path_files" \
-        "--shell[opciones de la shell]:option:_options" \
-        "--user[Usuario del sistema]:user:_users" \
-        "--network[Interfaces de red]:red:_net_interfaces" \
-        "--parameters[Parametros]:param:_parameters"
-} 
+        "--file=[Seleccionar archivo]:archivo:_path_files" \
+        "--shell=[Opciones de la shell]:option:_options" \
+        "--user=[Usuario del sistema]:user:_users" \
+        "--network=[Interfaces de red]:red:_net_interfaces" \
+        "--parameters=[Parámetros]:param:_parameters"
 
+    case $state in
+        nombre)
+            _values "Nombres" Juan Pedro Maria
+            ;;
+        actividad)
+            case $words[2] in
+                Juan)
+                    _values "Actividades de Juan" estudiar trabajar viajar
+                    ;;
+                Pedro)
+                    _values "Actividades de Pedro" correr nadar escalar
+                    ;;
+                Maria)
+                    _values "Actividades de Maria" cantar bailar pintar
+                    ;;
+            esac
+            ;;
+        parametro)
+            case $words[3] in
+                estudiar)
+                    _values "Materias" --matematicas --lenguaje --ciencias
+                    ;;
+                trabajar)
+                    _values "Opciones de trabajo" --oficina --remoto --freelance
+                    ;;
+                viajar)
+                    _values "Opciones de viaje" --nacional --internacional --aventura
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_miapp
